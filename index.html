@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarcePrint3D | Sistema Avanzado</title>
+    <title>MarcePrint3D | Catálogo Inteligente</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -18,7 +18,7 @@
         body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--text); transition: 0.3s; }
         header { background: var(--white); padding: 40px 20px; text-align: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: relative; }
         
-        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; }
+        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
         .logo-text { font-size: 3.2rem; font-weight: 600; color: var(--gris); margin: 0; letter-spacing: -1px; }
         .logo-text span { color: var(--rosa); }
 
@@ -50,18 +50,18 @@
 <body data-theme="light">
 
     <header>
-        <button class="theme-toggle" onclick="toggleTheme()">🌓 Modo</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓 Cambiar Tema</button>
         <h1 class="logo-text">Marce<span>Print</span>3D</h1>
-        <p style="margin: 8px 0 0; color: var(--rosa); font-weight: 600;">Catálogo via Apps Script</p>
+        <p style="margin: 8px 0 0; color: var(--rosa); font-weight: 600;">Tecnología Apps Script Activa</p>
     </header>
 
     <div class="filter-menu" id="menuFiltros">
-        <button class="filter-btn active" onclick="filtrar('all', this)">Todo</button>
+        <button class="filter-btn active" onclick="filtrar('all', this)">Todo el Inventario</button>
     </div>
 
     <div class="container" id="vitrina">
         <div class="loader"></div>
-        <p style="text-align: center; width: 100%;">Conectando con la API de MarcePrint3D...</p>
+        <p style="text-align: center; width: 100%;">Sincronizando con MarcePrint Cloud...</p>
     </div>
 
     <div id="miModal" class="modal">
@@ -72,7 +72,7 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbw38IdWQjeiBv2rw5e0a_WwPHCh7z_VGuvUwlb1MpPa1ZAPAsycHyxWnYHhUaJ05Gxz/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwg0FPhLnxUEVc5iHhL4Rm-8TnvrytwlnRJxhHoLJeKPicGiKByza8EFglnSObzXb9c/exec";
         const MI_WHATSAPP = "50300000000"; 
         const LOGOS = { articulado: '🐉', movible: '⚙️', armable: '🧩', figura: '🗿', funcional: '🔧', decorativo: '✨' };
 
@@ -80,10 +80,10 @@
 
         async function cargarDatos() {
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch(SCRIPT_URL);
                 const rawData = await response.json();
                 
-                // Procesar y limpiar datos del JSON
+                // Mapeo dinámico basado en los encabezados de su hoja
                 productosGlobal = rawData.map((p, i) => ({
                     id: i,
                     cat: String(p.categoria || "").toLowerCase().trim(),
@@ -99,8 +99,7 @@
                 generarFiltros();
                 renderizar(productosGlobal);
             } catch (err) {
-                document.getElementById('vitrina').innerHTML = "<p>⚠️ Error: Verifique que el Script esté publicado para 'Cualquiera'.</p>";
-                console.error(err);
+                document.getElementById('vitrina').innerHTML = "<p>⚠️ Error de conexión. Verifique la autorización de la extensión.</p>";
             }
         }
 
@@ -114,14 +113,18 @@
 
         function renderizar(lista) {
             const vitrina = document.getElementById('vitrina');
+            if(lista.length === 0) {
+                vitrina.innerHTML = "<p>Cargando productos o inventario vacío...</p>";
+                return;
+            }
             vitrina.innerHTML = lista.map(p => `
                 <div class="card" onclick="abrirModal(${p.id})">
-                    <div class="img-box">${p.img ? `<img src="${p.img}">` : `<i>${LOGOS[p.cat] || '📦'}</i>`}</div>
+                    <div class="img-box">${p.img ? `<img src="${p.img}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><i style="display:none;">${LOGOS[p.cat] || '📦'}</i>` : `<i>${LOGOS[p.cat] || '📦'}</i>`}</div>
                     <small style="color:var(--rosa); font-weight:600; text-transform:uppercase;">${p.cat}</small>
                     <h3 style="margin:10px 0;">${p.nom}</h3>
                     <p style="font-size:0.85rem; color:#777;">${p.desc_c}</p>
                     <span class="price">$${p.precio}</span>
-                    <button class="btn-ver">Ver Detalles</button>
+                    <button class="btn-ver">Ficha Técnica</button>
                 </div>
             `).join('');
         }
@@ -140,7 +143,7 @@
                 <p style="line-height:1.5;">${p.desc_f}</p>
                 <div class="price" style="font-size:2.5rem; margin:20px 0;">$${p.precio}</div>
                 <button class="btn-ver" style="background:var(--rosa); padding:18px; border-radius:20px;" 
-                onclick="window.location.href='https://wa.me/${MI_WHATSAPP}?text=Hola Carlos, me interesa el ${p.nom}'">
+                onclick="window.location.href='https://wa.me/${MI_WHATSAPP}?text=Hola Carlos, deseo consultar por el producto: ${p.nom}'">
                     Pedir por WhatsApp
                 </button>
             `;
