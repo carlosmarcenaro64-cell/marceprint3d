@@ -1,112 +1,373 @@
+/* --- Variables y Configuración Base --- */
 :root {
-    --accent: #ff6b6b;
-    --soft-blue: #48dbfb;
-    --text-dark: #2d3436;
-    --bg-light: #ffffff;
-    --rounded: 20px;
+    --primary: #00f2fe; /* Cian eléctrico */
+    --primary-dim: rgba(0, 242, 254, 0.6);
+    --secondary: #4facfe; /* Azul profundo */
+    --bg-dark: #080a10; /* Casi negro industrial */
+    --bg-card: rgba(20, 25, 35, 0.8); /* Glassmorphism dark */
+    --text-main: #e0e6ed;
+    --text-muted: #94a3b8;
+    --white: #ffffff;
+    --font-tech: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    --transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* {
+    box-shadow: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 body {
-    background-color: #f9f9fb;
-    font-family: 'Quicksand', sans-serif; /* Sugerida por su amigabilidad */
-    color: var(--text-dark);
+    font-family: var(--font-body);
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+    line-height: 1.6;
 }
 
-.hero-v2 {
-    background: linear-gradient(135deg, #fff5f5 0%, #f0f4ff 100%);
-    padding: 100px 5%;
-    text-align: center;
+/* Fondo de estrellas/partículas sutil (CSS puro) */
+.stars {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 3px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 2px);
+    background-size: 550px 550px, 350px 350px;
+    background-position: 0 0, 40px 60px;
+    opacity: 0.1;
+    z-index: -1;
 }
 
-.pop-text {
-    color: var(--accent);
-    font-size: 1.2em;
-    font-weight: 800;
+/* --- Animaciones Keyframes --- */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { 
+    from { opacity: 0; transform: translateY(30px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 5px var(--primary-dim); }
+    50% { box-shadow: 0 0 20px var(--primary); }
+    100% { box-shadow: 0 0 5px var(--primary-dim); }
+}
+@keyframes scrollDown {
+    0% { transform: translate(-50%, 0); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translate(-50%, 15px); opacity: 0; }
 }
 
-.card-pop {
-    background: white;
-    border: none;
-    border-radius: var(--rounded);
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    transition: all 0.4s ease;
-    border: 2px solid transparent;
+/* --- Header y Navegación --- */
+header {
+    background: rgba(8, 10, 16, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 1rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    animation: fadeIn 1s ease;
 }
 
-.card-pop:hover {
-    transform: translateY(-8px) scale(1.02);
-    border-color: var(--soft-blue);
-    box-shadow: 0 20px 40px rgba(72, 219, 251, 0.2);
-}
-
-.img-box {
-    background: var(--bg); /* Color dinámico por tarjeta */
-    border-radius: 15px;
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-    overflow: hidden;
-}
-
-.img-box img {
-    max-width: 80%;
-    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1));
-    transition: 0.3s;
-}
-
-.card-pop:hover .img-box img {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.badge {
-    position: absolute;
-    top: -10px;
-    left: 20px;
-    background: var(--accent);
-    color: white;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    z-index: 10;
-}
-
-.price-row {
+nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 15px 0;
 }
 
-.tag-simple {
-    background: #eee;
-    padding: 4px 10px;
-    border-radius: 10px;
-    font-size: 0.8rem;
+.logo {
+    font-family: var(--font-tech);
+    font-size: 1.8rem;
+    color: var(--white);
+    letter-spacing: -1px;
 }
 
-.price {
+.logo span {
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    position: relative;
+}
+
+nav a:not(.btn-solicitar):hover {
+    color: var(--white);
+}
+
+/* Línea animada bajo el menú */
+nav a:not(.btn-solicitar)::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; left: 0; width: 0; height: 2px;
+    background-color: var(--primary);
+    transition: var(--transition);
+}
+
+nav a:hover::after { width: 100%; }
+
+.btn-solicitar {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-family: var(--font-tech);
+    font-size: 0.9rem;
+}
+
+.btn-solicitar:hover {
+    background: var(--primary);
+    color: var(--bg-dark);
+    box-shadow: 0 0 15px var(--primary-dim);
+}
+
+/* --- Sección Hero --- */
+.hero {
+    height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: radial-gradient(circle at center, #1a2236 0%, var(--bg-dark) 70%);
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-family: var(--font-tech);
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    color: var(--white);
+}
+
+.hero h1 .highlight {
+    background: linear-gradient(to right, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none; /* Reset shadow for text-clip */
+}
+
+.hero p {
     font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--text-dark);
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    font-weight: 400;
 }
 
-.btn-order {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    background: var(--text-dark);
-    color: white;
+.hero-btns {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 15px 35px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-family: var(--font-tech);
     font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+    transition: var(--transition);
 }
 
-.btn-order:hover {
-    background: var(--soft-blue);
-    transform: scale(1.02);
+.btn-primary {
+    background: var(--primary);
+    color: var(--bg-dark);
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px var(--primary-dim);
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.03);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+.scroll-down {
+    position: absolute;
+    bottom: 30px; left: 50%;
+    width: 2px; height: 50px;
+    background: rgba(255,255,255,0.1);
+}
+
+.scroll-down::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -4px; width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    animation: scrollDown 2s infinite;
+}
+
+/* --- Catálogo y Tarjetas --- */
+main {
+    padding: 60px 5%;
+}
+
+.section-title {
+    font-family: var(--font-tech);
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 60px;
+    color: var(--white);
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 3px;
+    background: var(--primary);
+}
+
+.grid-productos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Estilo Glassmorphism para las tarjetas */
+.card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.03);
+    transition: var(--transition);
+    position: relative;
+    opacity: 0; /* Para la animación de entrada */
+}
+
+/* Animación de entrada con delay */
+.card-animate {
+    animation: slideUp 0.6s ease forwards;
+    animation-delay: calc(var(--order) * 0.15s);
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--primary-dim);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Brillo interior al hacer hover */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at top right, rgba(0,242,254,0.1), transparent 70%);
+    opacity: 0;
+    transition: var(--transition);
+    pointer-events: none;
+}
+
+.card:hover::after { opacity: 1; }
+
+.img-container {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+}
+
+.img-container img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.card:hover .img-container img {
+    transform: scale(1.1);
+}
+
+.tag {
+    position: absolute;
+    top: 15px; right: 15px;
+    background: #475569; /* Color para PETG/PLA */
+    color: white;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-family: var(--font-tech);
+}
+
+.tag-resina { background: #7c3aed; }
+.tag-tpu { background: #db2777; }
+
+.card-body { padding: 20px; }
+
+.card-body h3 {
+    font-family: var(--font-tech);
+    color: var(--white);
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+}
+
+.card-body p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    height: 48px; /* Altura fija para alineación */
+    overflow: hidden;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 15px;
+}
+
+.precio {
+    font-family: var(--font-tech);
+    font-size: 1.6rem;
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary-dim);
+}
+
+.btn-add {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--white);
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.btn-add:hover {
+    background: var(--white);
+    color: var(--bg-dark);
+}
+
+/* --- Media Queries (Adaptabilidad Móvil) --- */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.8rem; }
+    .logo { font-size: 1.5rem; }
+    nav ul { display: none; } /* En producción se requiere menú hamburguesa JS */
 }
