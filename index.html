@@ -3,38 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marceprint3D | De Bit a Átomo</title>
+    <title>Marceprint3D | Fabricación Aditiva Profesional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-    <header>
+    
+    <div class="stars"></div>
+
+    <header class="header-fade-in">
         <nav>
-            <div class="logo">MARCEPRINT3D</div>
+            <div class="logo">MARCE<span>PRINT</span>3D</div>
             <ul>
                 <li><a href="#catalogo">Catálogo</a></li>
                 <li><a href="#materiales">Materiales</a></li>
-                <li><a href="#contacto">Solicitar</a></li>
+                <li><a href="#contacto" class="btn-solicitar">Solicitar Pieza</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="hero">
-        <h1>Impresión 3D de Alta Precisión</h1>
-        <p>Transformamos sus coordenadas digitales en objetos tangibles.</p>
-        <a href="#catalogo" class="btn">Explorar Diseños</a>
+        <div class="hero-content animation-slide-up">
+            <h1>Impresión 3D<br><span class="highlight">Nivel Industrial</span></h1>
+            <p>Precisión geométrica y materiales avanzados para sus proyectos más exigentes.</p>
+            <div class="hero-btns">
+                <a href="#catalogo" class="btn-primary">Ver Modelos</a>
+                <a href="#contacto" class="btn-secondary">Cotizar Personalizado</a>
+            </div>
+        </div>
+        <div class="scroll-down"></div>
     </section>
 
     <main id="catalogo">
-        <h2>Modelos Disponibles</h2>
+        <h2 class="section-title">Galería de Precisión</h2>
         <div class="grid-productos">
-            <div class="card">
-                <div class="img-placeholder">Modelo 3D</div>
-                <h3>Engranaje Mecánico</h3>
-                <p>Material: PETG | Resistencia Industrial</p>
-                <span class="precio">$15.00</span>
-                <button class="btn-buy">Elegir</button>
+            
+            <div class="card card-animate" style="--order: 1">
+                <div class="img-container">
+                    <img src="https://sc04.alicdn.com/kf/H63c4c9e782634e9e9885834857d425a8v.jpg" alt="Engranaje 3D">
+                    <span class="tag">PETG</span>
+                </div>
+                <div class="card-body">
+                    <h3>Engranaje Helicoidal</h3>
+                    <p>Resistencia mecánica y química.</p>
+                    <div class="card-footer">
+                        <span class="precio">$24.99</span>
+                        <button class="btn-add">Añadir</button>
+                    </div>
+                </div>
             </div>
+
+            <div class="card card-animate" style="--order: 2">
+                <div class="img-container">
+                    <img src="https://cults3d.com/cdn-cgi/image/width=512/https://cults3d.com/photos/vM/0D/zM/jX/original/image_8a123bc861_01.jpg" alt="Busto Resina">
+                    <span class="tag tag-resina">Resina</span>
+                </div>
+                <div class="card-body">
+                    <h3>Busto Artístico</h3>
+                    <p>Detalle micrométrico, acabado liso.</p>
+                    <div class="card-footer">
+                        <span class="precio">$39.50</span>
+                        <button class="btn-add">Añadir</button>
+                    </div>
+                </div>
             </div>
+
+            <div class="card card-animate" style="--order: 3">
+                <div class="img-container">
+                    <img src="https://m.media-amazon.com/images/I/61k4VvO6bBL._AC_UF894,1000_QL80_.jpg" alt="Soporte Flexible">
+                    <span class="tag tag-tpu">TPU</span>
+                </div>
+                <div class="card-body">
+                    <h3>Funda Amortiguadora</h3>
+                    <p>Material elástico y duradero.</p>
+                    <div class="card-footer">
+                        <span class="precio">$18.00</span>
+                        <button class="btn-add">Añadir</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </main>
 </body>
 </html>
