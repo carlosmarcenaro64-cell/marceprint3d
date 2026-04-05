@@ -8,57 +8,68 @@
     <style>
         :root { --rosa: #ff5d8f; --gris: #2d3436; --bg: #f8f9fc; --white: #ffffff; --card-bg: #ffffff; --text: #2d3436; --img-bg: #f1f3f6; }
         [data-theme="dark"] { --bg: #121212; --white: #1e1e1e; --card-bg: #252525; --text: #e0e0e0; --gris: #e0e0e0; --img-bg: #333333; }
-        body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--text); transition: 0.3s; }
         
-        header { background: var(--white); padding: 30px 20px; text-align: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: relative; }
-        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 8px 18px; border-radius: 25px; cursor: pointer; font-weight: 600; font-size: 0.7rem; }
-        .logo-text { font-size: 2.5rem; font-weight: 600; color: var(--gris); margin: 0; }
+        body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--text); transition: 0.3s; overflow-x: hidden; }
+        
+        header { background: var(--white); padding: 25px 20px; text-align: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: relative; }
+        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.7rem; font-weight: 600; }
+        .logo-text { font-size: 2.2rem; font-weight: 600; color: var(--gris); margin: 0; }
         .logo-text span { color: var(--rosa); }
         
-        /* Controles de Filtros */
+        .float-btn { position: fixed; bottom: 20px; z-index: 999; padding: 14px 22px; border-radius: 50px; border: none; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: 0.3s; }
+        .custom-design-btn { left: 20px; background: var(--gris); }
+        .cart-float-btn { right: 20px; background: var(--rosa); display: none; }
+
         .controls { background: var(--white); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 15px; text-align: center; }
-        .filter-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .filter-btn { border: 1px solid #ddd; padding: 6px 15px; border-radius: 50px; cursor: pointer; background: var(--white); color: var(--text); font-weight: 600; font-size: 0.8rem; transition: 0.3s; }
+        .filter-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .filter-btn { border: 1px solid #ddd; padding: 6px 14px; border-radius: 50px; cursor: pointer; background: var(--white); color: var(--text); font-weight: 600; font-size: 0.8rem; }
         .filter-btn.active { background: var(--rosa); color: white; border-color: var(--rosa); }
         
-        .price-filter { display: flex; align-items: center; justify-content: center; gap: 15px; font-weight: 600; font-size: 0.9rem; }
-        input[type="range"] { accent-color: var(--rosa); cursor: pointer; width: 200px; }
+        .price-filter { display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600; font-size: 0.85rem; }
+        input[type="range"] { accent-color: var(--rosa); width: 180px; }
 
-        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; padding: 20px 5%; max-width: 1300px; margin: auto; }
-        .card { background: var(--card-bg); border-radius: 25px; padding: 20px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.03); transition: 0.4s; cursor: pointer; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(255, 93, 143, 0.15); }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px 5%; max-width: 1200px; margin: auto; }
+        .card { background: var(--card-bg); border-radius: 22px; padding: 18px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; border: 1px solid transparent; }
+        .card:hover { transform: translateY(-5px); border-color: var(--rosa); box-shadow: 0 10px 20px rgba(255, 93, 143, 0.1); }
         
-        .img-box { background: var(--img-bg); height: 180px; border-radius: 20px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .img-box { background: var(--img-bg); height: 180px; border-radius: 18px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; }
         
-        .desc-corta { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 2.4em; }
-
-        .modal-img-container { width: 100%; height: 300px; border-radius: 20px; overflow: hidden; background: var(--img-bg); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
-        .modal-img-container img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.3s ease; cursor: zoom-in; }
-        .modal-img-container img:active { transform: scale(1.6); }
-
-        .price { font-size: 1.6rem; font-weight: 600; color: var(--rosa); margin: 5px 0; }
-        .btn-ver { background: var(--gris); color: var(--white); border: none; padding: 12px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; }
-
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
-        .modal-content { background: var(--white); margin: 5vh auto; padding: 30px; border-radius: 30px; width: 90%; max-width: 500px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
-        .close { position: absolute; right: 20px; top: 15px; font-size: 2rem; cursor: pointer; color: var(--rosa); }
+        /* Estilo para la descripción corta en la vitrina */
+        .desc-corta { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 12px; height: 2.5em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.25; }
         
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--rosa); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 40px auto; }
+        .price { font-size: 1.5rem; font-weight: 600; color: var(--rosa); }
+
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); }
+        .modal-content { background: var(--white); margin: 3vh auto; padding: 25px; border-radius: 25px; width: 85%; max-width: 450px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
+        .close { position: absolute; right: 18px; top: 12px; font-size: 1.8rem; cursor: pointer; color: var(--rosa); z-index: 10; }
+        
+        .modal-img-container { width: 100%; height: auto; max-height: 350px; border-radius: 18px; overflow: hidden; background: var(--img-bg); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
+        .modal-img-container img { width: 100%; height: auto; max-height: 350px; object-fit: contain; }
+
+        /* Estilo para la descripción completa en el modal */
+        .desc-completa { font-size: 0.95rem; color: var(--text); line-height: 1.5; margin: 15px 0; text-align: left; padding: 0 10px; }
+
+        .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; text-align: left; gap: 8px; font-size: 0.9rem; }
+        .btn-remove { background: #ff4757; color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 0.65rem; }
+        .paint-box { background: var(--img-bg); padding: 12px; border-radius: 12px; margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        .btn-ver { background: var(--gris); color: var(--white); border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--rosa); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 50px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body data-theme="light">
-
     <header>
         <button class="theme-toggle" onclick="toggleTheme()">🌓 TEMA</button>
         <h1 class="logo-text">Marce<span>Print</span>3D</h1>
     </header>
 
+    <button class="float-btn custom-design-btn" onclick="solicitarPersonalizado()">🎨 Diseño Personalizado</button>
+    <button id="cartFloat" class="float-btn cart-float-btn" onclick="mostrarRevisionCarrito()">🛒 Revisar Pedido (<span id="cartCount">0</span>)</button>
+
     <div class="controls">
-        <div class="filter-menu" id="menuFiltros">
-            <button class="filter-btn active" onclick="cambiarCat('all', this)">Todo</button>
-        </div>
+        <div class="filter-menu" id="menuFiltros"><button class="filter-btn active" onclick="cambiarCat('all', this)">Todo</button></div>
         <div class="price-filter">
             <span>$0</span>
             <input type="range" id="priceRange" min="0" max="100" value="100" oninput="aplicarFiltros()">
@@ -68,108 +79,146 @@
 
     <div class="container" id="vitrina"><div class="loader"></div></div>
 
-    <div id="miModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="cerrarModal()">&times;</span>
-            <div id="contenidoModal"></div>
-        </div>
-    </div>
+    <div id="miModal" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal()">&times;</span><div id="contenidoModal"></div></div></div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwg0FPhLnxUEVc5iHhL4Rm-8TnvrytwlnRJxhHoLJeKPicGiKByza8EFglnSObzXb9c/exec";
         const WHATSAPP = "50377190952";
         const LOGOS = { articulado: '🐉', movible: '⚙️', armable: '🧩', figura: '🗿', funcional: '🔧', decorativo: '✨' };
-        
-        let productos = [];
-        let categoriaActual = 'all';
+        let productos = [], carrito = [], categoriaActual = 'all';
 
         async function cargar() {
             try {
                 const res = await fetch(API_URL);
                 productos = await res.json();
-                
-                // Configurar slider de precio basado en el producto más caro
                 const maxPrecio = Math.ceil(Math.max(...productos.map(p => parseFloat(p.precio) || 0)));
                 const slider = document.getElementById('priceRange');
-                slider.max = maxPrecio;
-                slider.value = maxPrecio;
+                slider.max = maxPrecio; slider.value = maxPrecio;
                 document.getElementById('priceLabel').innerText = maxPrecio;
-
-                generarFiltros();
-                renderizar(productos);
-            } catch (e) { document.getElementById('vitrina').innerHTML = "Error al conectar con la base de datos."; }
+                generarFiltros(); renderizar(productos);
+            } catch (e) { document.getElementById('vitrina').innerHTML = "Error de conexión."; }
         }
 
         function generarFiltros() {
             const menu = document.getElementById('menuFiltros');
             const cats = [...new Set(productos.map(p => String(p.categoria || "").trim().toLowerCase()))].filter(Boolean);
-            cats.forEach(c => {
-                menu.innerHTML += `<button class="filter-btn" onclick="cambiarCat('${c}', this)">${c.toUpperCase()}</button>`;
-            });
+            cats.forEach(c => menu.innerHTML += `<button class="filter-btn" onclick="cambiarCat('${c}', this)">${c.toUpperCase()}</button>`);
         }
 
         function cambiarCat(cat, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            categoriaActual = cat;
-            aplicarFiltros();
+            btn.classList.add('active'); categoriaActual = cat; aplicarFiltros();
         }
 
         function aplicarFiltros() {
             const maxPrice = parseFloat(document.getElementById('priceRange').value);
             document.getElementById('priceLabel').innerText = maxPrice;
-
-            const filtrados = productos.filter(p => {
-                const cumpleCat = (categoriaActual === 'all' || p.categoria?.toLowerCase() === categoriaActual);
-                const cumplePrecio = (parseFloat(p.precio) || 0) <= maxPrice;
-                return cumpleCat && cumplePrecio;
-            });
+            const filtrados = productos.filter(p => (categoriaActual === 'all' || p.categoria?.toLowerCase() === categoriaActual) && (parseFloat(p.precio) || 0) <= maxPrice);
             renderizar(filtrados);
         }
 
         function renderizar(lista) {
-            document.getElementById('vitrina').innerHTML = lista.map((p, idx) => {
-                // Encontrar el índice original para el modal
+            document.getElementById('vitrina').innerHTML = lista.map((p) => {
                 const originalIdx = productos.findIndex(prod => prod.nombre === p.nombre);
-                return `
-                <div class="card" onclick="abrirModal(${originalIdx})">
-                    <div class="img-box">
-                        ${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}" loading="lazy">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}
-                    </div>
-                    <h3 style="margin:5px 0; font-size:1.1rem;">${p.nombre || 'Sin nombre'}</h3>
-                    <p class="desc-corta">${p.descripcion_corta || 'Calidad de impresión garantizada.'}</p>
-                    <span class="price">$${p.precio || '0'}</span>
-                    <button class="btn-ver" style="margin-top:auto;">Detalles</button>
-                </div>
-            `}).join('');
+                return `<div class="card" onclick="abrirModal(${originalIdx})">
+                    <div class="img-box">${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}</div>
+                    <h3 style="margin:5px 0;">${p.nombre}</h3>
+                    <p class="desc-corta">${p.descripcion_corta || 'Diseño exclusivo de MarcePrint3D.'}</p>
+                    <span class="price">$${p.precio}</span>
+                    <button class="btn-ver">Detalles</button>
+                </div>`;
+            }).join('');
         }
 
         function abrirModal(idx) {
             const p = productos[idx];
-            const mensaje = encodeURIComponent(`Hola Carlos, me interesa este producto:\n\n*${p.nombre}*\nPrecio: $${p.precio}\nLink: ${p.imagen || 'Sin imagen'}`);
-            
+            const costoPintado = (parseFloat(p.precio) * 0.35 + (parseFloat(p.peso || 0) * 0.05)).toFixed(2);
             document.getElementById('contenidoModal').innerHTML = `
-                <div class="modal-img-container">
-                    ${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}">` : `<div style="font-size:5rem;">${LOGOS[p.categoria?.toLowerCase()] || '📦'}</div>`}
+                <div class="modal-img-container">${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}</div>
+                <h2 style="margin-bottom:5px;">${p.nombre}</h2>
+                
+                <div class="desc-completa">${p.descripcion_completa || 'Sin descripción detallada disponible.'}</div>
+                
+                <div class="paint-box" onclick="document.getElementById('paintCheck').click()">
+                    <input type="checkbox" id="paintCheck" onchange="actModalPrice(${p.precio}, ${costoPintado})"> 
+                    <span>Solicitar Pintado (+$${costoPintado})</span>
                 </div>
-                <h2>${p.nombre}</h2>
-                <p style="color:var(--gris); font-size:0.95rem;">${p.descripcion_completa || 'Sin descripción adicional.'}</p>
-                <div style="margin:10px 0;">
-                    <span style="background:#eee; padding:5px 10px; border-radius:8px; font-size:0.8rem;">📦 ${p.categoria || 'General'}</span>
-                </div>
-                <div class="price" style="font-size:2.5rem;">$${p.precio}</div>
-                <button class="btn-ver" style="background:var(--rosa); padding:15px; font-size:1.1rem;" onclick="window.open('https://wa.me/${WHATSAPP}?text=${mensaje}')">
-                    Pedir por WhatsApp
-                </button>
+                <div class="price" id="modalTotal">$${p.precio}</div>
+                <button class="btn-ver" style="background:var(--rosa)" onclick="agregarAlCarrito(${idx}, ${costoPintado})">Añadir al Carrito</button>`;
+            document.getElementById('miModal').style.display = "block";
+        }
+
+        function actModalPrice(base, extra) {
+            document.getElementById('modalTotal').innerText = `$${document.getElementById('paintCheck').checked ? (base + parseFloat(extra)).toFixed(2) : base.toFixed(2)}`;
+        }
+
+        function agregarAlCarrito(idx, costoExtra) {
+            const p = productos[idx];
+            const pintado = document.getElementById('paintCheck').checked;
+            const precioFinal = pintado ? (parseFloat(p.precio) + parseFloat(costoExtra)).toFixed(2) : parseFloat(p.precio).toFixed(2);
+            
+            carrito.push({ nombre: p.nombre, precioTotal: precioFinal, pintado: pintado, id: Date.now() });
+            actualizarCartBtn(); cerrarModal();
+        }
+
+        function actualizarCartBtn() {
+            const btn = document.getElementById('cartFloat');
+            btn.style.display = carrito.length > 0 ? "block" : "none";
+            document.getElementById('cartCount').innerText = carrito.length;
+        }
+
+        function mostrarRevisionCarrito() {
+            let total = 0;
+            let html = `<h2>Tu Pedido</h2><div style="text-align:left; margin-bottom:15px;">`;
+            carrito.forEach((item, index) => {
+                total += parseFloat(item.precioTotal);
+                html += `<div class="cart-item">
+                    <div><strong>${item.nombre}</strong><br>
+                    <small style="color:var(--rosa)">${item.pintado ? '✓ Incluye Pintado' : 'Solo impresión'}</small></div>
+                    <div style="text-align:right;"><strong>$${item.precioTotal}</strong><br><button class="btn-remove" onclick="removerDelCart(${index})">Quitar</button></div>
+                </div>`;
+            });
+            html += `</div><div class="price" style="font-size:1.8rem; margin:20px 0;">Total: $${total.toFixed(2)}</div>
+                    <button class="btn-ver" style="background:var(--rosa)" onclick="finalizarPedido()">Confirmar y WhatsApp</button>
+                    <button class="btn-ver" style="background:#eee; color:#333;" onclick="cerrarModal()">Seguir comprando</button>`;
+            document.getElementById('contenidoModal').innerHTML = html;
+            document.getElementById('miModal').style.display = "block";
+        }
+
+        function removerDelCart(idx) {
+            carrito.splice(idx, 1); actualizarCartBtn();
+            carrito.length > 0 ? mostrarRevisionCarrito() : cerrarModal();
+        }
+
+        function finalizarPedido() {
+            let total = 0;
+            let msg = "Hola Carlos, mi pedido es:\n\n";
+            carrito.forEach(i => {
+                total += parseFloat(i.precioTotal);
+                msg += `• *${i.nombre}* (${i.pintado ? 'Pintado' : 'Sin pintar'}) - $${i.precioTotal}\n`;
+            });
+            msg += `\n*TOTAL: $${total.toFixed(2)}*`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
+        }
+
+        function solicitarPersonalizado() {
+            document.getElementById('contenidoModal').innerHTML = `
+                <h2>Diseño Personalizado</h2>
+                <p style="font-size:0.9rem;">Medidas máximas: 180x180x180 mm. Por favor, especifique y adjunte imagen por WhatsApp.</p>
+                <input type="text" id="medidas" placeholder="Ej: 150x150x100 mm" style="width:90%; padding:10px; border-radius:10px; border:1px solid #ddd; margin-bottom:15px;">
+                <button class="btn-ver" style="background:var(--rosa)" onclick="enviarPersonalizado()">Contactar ahora</button>
             `;
             document.getElementById('miModal').style.display = "block";
         }
 
-        function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
-        function toggleTheme() { 
-            const b = document.body; 
-            b.setAttribute('data-theme', b.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); 
+        function enviarPersonalizado() {
+            const med = document.getElementById('medidas').value || "No especificadas";
+            const msg = `Hola Carlos, quiero un diseño personalizado.\nMedidas: ${med}\n(Adjuntaré la imagen por aquí)`;
+            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
         }
+
+        function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
+        function toggleTheme() { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
         window.onclick = (e) => { if(e.target.className === 'modal') cerrarModal(); }
         cargar();
     </script>
