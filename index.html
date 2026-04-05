@@ -137,7 +137,7 @@
                         ${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}" loading="lazy">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}
                     </div>
                     <h3 style="margin:5px 0; font-size:1.1rem;">${p.nombre || 'Sin nombre'}</h3>
-                    <p class="desc-corta">${p.descripcion_completa || 'Calidad de impresión garantizada.'}</p>
+                    <p class="desc-corta">${p.descripcion_corta || 'Calidad de impresión garantizada.'}</p>
                     <span class="price">$${p.precio || '0'}</span>
                     <button class="btn-ver" style="margin-top:auto;">Detalles</button>
                 </div>
