@@ -3,224 +3,566 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarcePrint3D | Catálogo Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <title>MarcePrint3D | Sistema de Gestión Carlos Manuel Panameño Marcenaro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --rosa: #ff5d8f; --gris: #2d3436; --bg: #f8f9fc; --white: #ffffff; --card-bg: #ffffff; --text: #2d3436; --img-bg: #f1f3f6; }
-        [data-theme="dark"] { --bg: #121212; --white: #1e1e1e; --card-bg: #252525; --text: #e0e0e0; --gris: #e0e0e0; --img-bg: #333333; }
-        
-        body { font-family: 'Fredoka', sans-serif; background-color: var(--bg); margin: 0; color: var(--text); transition: 0.3s; overflow-x: hidden; }
-        
-        header { background: var(--white); padding: 25px 20px; text-align: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: relative; }
-        .theme-toggle { position: absolute; top: 15px; right: 15px; background: var(--rosa); color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-size: 0.7rem; font-weight: 600; }
-        .logo-text { font-size: 2.2rem; font-weight: 600; color: var(--gris); margin: 0; }
-        .logo-text span { color: var(--rosa); }
-        
-        .float-btn { position: fixed; bottom: 20px; z-index: 999; padding: 14px 22px; border-radius: 50px; border: none; color: white; font-weight: 600; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: 0.3s; }
-        .custom-design-btn { left: 20px; background: var(--gris); }
-        .cart-float-btn { right: 20px; background: var(--rosa); display: none; }
+        :root {
+            --rosa: #ff5d8f;
+            --rosa-glow: rgba(255, 93, 143, 0.4);
+            --gris: #2d3436;
+            --bg: #f0f2f5;
+            --white: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text: #1a1a1a;
+            --img-bg: #e9ecef;
+            --ai-color: #8e44ad;
+            --header-bg: rgba(255, 255, 255, 0.95);
+            --cat-btn-bg: var(--gris);
+            --cat-btn-text: #ffffff;
+            --badge-bg: var(--gris);
+            --badge-text: #ffffff;
+            --select-bg: #ffffff;
+            --select-text: #1a1a1a;
+            --stat-color: #636e72;
+        }
 
-        .controls { background: var(--white); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 15px; text-align: center; }
-        .filter-menu { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .filter-btn { border: 1px solid #ddd; padding: 6px 14px; border-radius: 50px; cursor: pointer; background: var(--white); color: var(--text); font-weight: 600; font-size: 0.8rem; }
-        .filter-btn.active { background: var(--rosa); color: white; border-color: var(--rosa); }
-        
-        .price-filter { display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 600; font-size: 0.85rem; }
-        input[type="range"] { accent-color: var(--rosa); width: 180px; }
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --white: #1a1a1a;
+            --card-bg: rgba(30, 30, 30, 0.8);
+            --text: #f5f5f5;
+            --gris: #f5f5f5;
+            --img-bg: #2d2d2d;
+            --header-bg: rgba(20, 20, 20, 0.95);
+            --cat-btn-bg: #e0e0e0; 
+            --cat-btn-text: #1a1a1a; 
+            --badge-bg: #e0e0e0;
+            --badge-text: #1a1a1a;
+            --select-bg: #e0e0e0;
+            --select-text: #1a1a1a;
+            --stat-color: #b2bec3;
+        }
 
-        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; padding: 20px 5%; max-width: 1200px; margin: auto; }
-        .card { background: var(--card-bg); border-radius: 22px; padding: 18px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.3s; cursor: pointer; display: flex; flex-direction: column; border: 1px solid transparent; }
-        .card:hover { transform: translateY(-5px); border-color: var(--rosa); box-shadow: 0 10px 20px rgba(255, 93, 143, 0.1); }
-        
-        .img-box { background: var(--img-bg); height: 180px; border-radius: 18px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Estilo para la descripción corta en la vitrina */
-        .desc-corta { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 12px; height: 2.5em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; line-height: 1.25; }
-        
-        .price { font-size: 1.5rem; font-weight: 600; color: var(--rosa); }
+        /* --- ANIMACIÓN DE CARGA --- */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease;
+        }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); }
-        .modal-content { background: var(--white); margin: 3vh auto; padding: 25px; border-radius: 25px; width: 85%; max-width: 450px; position: relative; text-align: center; max-height: 90vh; overflow-y: auto; }
-        .close { position: absolute; right: 18px; top: 12px; font-size: 1.8rem; cursor: pointer; color: var(--rosa); z-index: 10; }
-        
-        .modal-img-container { width: 100%; height: auto; max-height: 350px; border-radius: 18px; overflow: hidden; background: var(--img-bg); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
-        .modal-img-container img { width: 100%; height: auto; max-height: 350px; object-fit: contain; }
+        .printer-frame {
+            width: 300px;
+            height: 220px;
+            border: 4px solid var(--gris);
+            border-bottom: 8px solid var(--gris);
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
 
-        /* Estilo para la descripción completa en el modal */
-        .desc-completa { font-size: 0.95rem; color: var(--text); line-height: 1.5; margin: 15px 0; text-align: left; padding: 0 10px; }
+        .extruder-head {
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background: #444;
+            top: 20px;
+            left: 0;
+            animation: printMovement 4s infinite linear;
+            z-index: 5;
+        }
 
-        .cart-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid #eee; text-align: left; gap: 8px; font-size: 0.9rem; }
-        .btn-remove { background: #ff4757; color: white; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 0.65rem; }
-        .paint-box { background: var(--img-bg); padding: 12px; border-radius: 12px; margin: 10px 0; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-        .btn-ver { background: var(--gris); color: var(--white); border: none; padding: 14px; width: 100%; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 8px; }
-        
-        .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--rosa); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 50px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .extruder-head::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 4px;
+            height: 8px;
+            background: var(--rosa);
+            transform: translateX(-50%);
+        }
+
+        .printed-logo {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--rosa);
+            height: 0;
+            overflow: hidden;
+            animation: logoRise 4s infinite linear;
+            white-space: nowrap;
+        }
+
+        @keyframes printMovement {
+            0% { left: 0; top: 160px; }
+            25% { left: 240px; top: 140px; }
+            50% { left: 0; top: 100px; }
+            75% { left: 240px; top: 60px; }
+            100% { left: 120px; top: 20px; }
+        }
+
+        @keyframes logoRise {
+            0% { height: 0; opacity: 0; }
+            100% { height: 60px; opacity: 1; }
+        }
+
+        /* --- INTERFAZ PRINCIPAL --- */
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            color: var(--text);
+            transition: 0.4s ease;
+        }
+
+        header {
+            background: var(--header-bg);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-control {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #themeToggleBtn {
+            background: transparent;
+            border: 2px solid var(--rosa);
+            padding: 8px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: var(--rosa);
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #themeToggleBtn:hover {
+            background: var(--rosa);
+            color: white;
+            box-shadow: 0 0 15px var(--rosa-glow);
+        }
+
+        /* --- LOGO ANIMADO --- */
+        .logo-container {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+            animation: motorHum 0.1s infinite;
+        }
+
+        .logo-text {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(
+                90deg, 
+                var(--gris) 0%, 
+                var(--rosa) 45%, 
+                #ff85a1 50%, 
+                var(--rosa) 55%, 
+                var(--gris) 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            animation: filamentFlow 5s linear infinite;
+            position: relative;
+        }
+
+        @keyframes filamentFlow { to { background-position: 200% center; } }
+
+        /* --- FILTROS Y CONTROLES --- */
+        .controls-area {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sort-select {
+            background: var(--select-bg);
+            border: 1px solid var(--rosa);
+            color: var(--select-text);
+            padding: 5px 15px;
+            border-radius: 10px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 30px 5%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: 0.4s;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--rosa);
+            box-shadow: 0 15px 35px var(--rosa-glow);
+        }
+
+        .img-container {
+            width: 100%;
+            height: 220px;
+            background: var(--img-bg);
+            border-radius: 20px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: 0.5s;
+        }
+
+        .tech-badge {
+            font-size: 0.7rem;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 4px 10px;
+            border-radius: 8px;
+            margin-right: 5px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .print-stats {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+            font-size: 0.75rem;
+            color: var(--stat-color);
+            font-weight: 600;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .price {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--rosa);
+            margin: 10px 0;
+        }
+
+        /* BOTONES */
+        .btn {
+            background: var(--rosa);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Outfit', sans-serif;
+            transition: 0.3s;
+        }
+
+        .btn-cat {
+            background: var(--cat-btn-bg);
+            color: var(--cat-btn-text);
+        }
+
+        .btn:hover { filter: brightness(1.1); }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: var(--white);
+            max-width: 500px;
+            margin: auto;
+            border-radius: 35px;
+            padding: 30px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            color: var(--text);
+        }
+
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
+            background: var(--rosa);
+            border-radius: 22px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 20px var(--rosa-glow);
+            z-index: 1000;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--gris);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
     </style>
 </head>
 <body data-theme="light">
-    <header>
-        <button class="theme-toggle" onclick="toggleTheme()">🌓 TEMA</button>
-        <h1 class="logo-text">Marce<span>Print</span>3D</h1>
-    </header>
 
-    <button class="float-btn custom-design-btn" onclick="solicitarPersonalizado()">🎨 Diseño Personalizado</button>
-    <button id="cartFloat" class="float-btn cart-float-btn" onclick="mostrarRevisionCarrito()">🛒 Revisar Pedido (<span id="cartCount">0</span>)</button>
-
-    <div class="controls">
-        <div class="filter-menu" id="menuFiltros"><button class="filter-btn active" onclick="cambiarCat('all', this)">Todo</button></div>
-        <div class="price-filter">
-            <span>$0</span>
-            <input type="range" id="priceRange" min="0" max="100" value="100" oninput="aplicarFiltros()">
-            <span>Máx: $<span id="priceLabel">100</span></span>
+    <!-- PRELOADER -->
+    <div id="preloader">
+        <div class="printer-frame">
+            <div class="extruder-head"></div>
+            <div class="printed-logo">MarcePrint3D</div>
         </div>
+        <p style="margin-top: 20px; font-weight: 600; letter-spacing: 3px; color: var(--gris)">CALIBRANDO CAPAS...</p>
     </div>
 
-    <div class="container" id="vitrina"><div class="loader"></div></div>
+    <header>
+        <div class="theme-control">
+            <button id="themeToggleBtn" onclick="toggleTheme()">Modo Oscuro</button>
+        </div>
+        
+        <div class="logo-container">
+            <h1 class="logo-text">MarcePrint3D</h1>
+        </div>
 
-    <div id="miModal" class="modal"><div class="modal-content"><span class="close" onclick="cerrarModal()">&times;</span><div id="contenidoModal"></div></div></div>
+        <div class="controls-area">
+            <div id="categorias" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;"></div>
+            <div>
+                <label id="orderLabel" style="font-size: 0.8rem; font-weight: 600; margin-right: 10px;">ORDENAR POR PRECIO:</label>
+                <select class="sort-select" id="priceSorter" onchange="handleSortChange()">
+                    <option value="default">Relevancia</option>
+                    <option value="low-high">Menor a Mayor</option>
+                    <option value="high-low">Mayor a Menor</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" id="vitrina"></main>
+
+    <div class="fab" onclick="verCarrito()">
+        🛒 <span class="cart-badge" id="cartCount">0</span>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content" id="modalBody"></div>
+    </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbwg0FPhLnxUEVc5iHhL4Rm-8TnvrytwlnRJxhHoLJeKPicGiKByza8EFglnSObzXb9c/exec";
-        const WHATSAPP = "50377190952";
-        const LOGOS = { articulado: '🐉', movible: '⚙️', armable: '🧩', figura: '🗿', funcional: '🔧', decorativo: '✨' };
-        let productos = [], carrito = [], categoriaActual = 'all';
+        const apiKey = "";
+        const SHEET_API = "https://script.google.com/macros/s/AKfycbwg0FPhLnxUEVc5iHhL4Rm-8TnvrytwlnRJxhHoLJeKPicGiKByza8EFglnSObzXb9c/exec";
+        const WA_PHONE = "50377190952";
+        
+        let inventory = [];
+        let filteredInventory = [];
+        let cart = [];
+        let currentCategory = "Todo";
 
-        async function cargar() {
+        window.onload = async () => {
+            await loadData();
+            setTimeout(() => {
+                const loader = document.getElementById('preloader');
+                if(loader) loader.style.opacity = '0';
+                setTimeout(() => loader?.remove(), 800);
+            }, 3000);
+        };
+
+        async function loadData() {
             try {
-                const res = await fetch(API_URL);
-                productos = await res.json();
-                const maxPrecio = Math.ceil(Math.max(...productos.map(p => parseFloat(p.precio) || 0)));
-                const slider = document.getElementById('priceRange');
-                slider.max = maxPrecio; slider.value = maxPrecio;
-                document.getElementById('priceLabel').innerText = maxPrecio;
-                generarFiltros(); renderizar(productos);
-            } catch (e) { document.getElementById('vitrina').innerHTML = "Error de conexión."; }
+                const res = await fetch(SHEET_API);
+                inventory = await res.json();
+                filteredInventory = [...inventory];
+                renderCategories();
+                renderInventory();
+            } catch (e) { console.error("Error crítico Carlos.", e); }
         }
 
-        function generarFiltros() {
-            const menu = document.getElementById('menuFiltros');
-            const cats = [...new Set(productos.map(p => String(p.categoria || "").trim().toLowerCase()))].filter(Boolean);
-            cats.forEach(c => menu.innerHTML += `<button class="filter-btn" onclick="cambiarCat('${c}', this)">${c.toUpperCase()}</button>`);
+        function renderCategories() {
+            const cats = [...new Set(inventory.map(p => p.categoria))];
+            const div = document.getElementById('categorias');
+            div.innerHTML = `<button class="btn btn-cat" style="width:auto; padding:5px 15px;" onclick="filterByCat('Todo')">Todo</button>` + 
+                cats.map(c => `<button class="btn btn-cat" style="width:auto; padding:5px 15px;" onclick="filterByCat('${c}')">${c}</button>`).join('');
         }
 
-        function cambiarCat(cat, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active'); categoriaActual = cat; aplicarFiltros();
+        function filterByCat(cat) {
+            currentCategory = cat;
+            handleSortChange(); 
         }
 
-        function aplicarFiltros() {
-            const maxPrice = parseFloat(document.getElementById('priceRange').value);
-            document.getElementById('priceLabel').innerText = maxPrice;
-            const filtrados = productos.filter(p => (categoriaActual === 'all' || p.categoria?.toLowerCase() === categoriaActual) && (parseFloat(p.precio) || 0) <= maxPrice);
-            renderizar(filtrados);
+        function handleSortChange() {
+            const sortVal = document.getElementById('priceSorter').value;
+            let result = currentCategory === "Todo" 
+                ? [...inventory] 
+                : inventory.filter(p => p.categoria === currentCategory);
+
+            if(sortVal === "low-high") {
+                result.sort((a, b) => parseFloat(a.precio) - parseFloat(b.precio));
+            } else if(sortVal === "high-low") {
+                result.sort((a, b) => parseFloat(b.precio) - parseFloat(a.precio));
+            }
+
+            filteredInventory = result;
+            renderInventory();
         }
 
-        function renderizar(lista) {
-            document.getElementById('vitrina').innerHTML = lista.map((p) => {
-                const originalIdx = productos.findIndex(prod => prod.nombre === p.nombre);
-                return `<div class="card" onclick="abrirModal(${originalIdx})">
-                    <div class="img-box">${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}</div>
-                    <h3 style="margin:5px 0;">${p.nombre}</h3>
-                    <p class="desc-corta">${p.descripcion_corta || 'Diseño exclusivo de MarcePrint3D.'}</p>
-                    <span class="price">$${p.precio}</span>
-                    <button class="btn-ver">Detalles</button>
-                </div>`;
-            }).join('');
-        }
-
-        function abrirModal(idx) {
-            const p = productos[idx];
-            const costoPintado = (parseFloat(p.precio) * 0.35 + (parseFloat(p.peso || 0) * 0.05)).toFixed(2);
-            document.getElementById('contenidoModal').innerHTML = `
-                <div class="modal-img-container">${p.imagen && p.imagen.startsWith('http') ? `<img src="${p.imagen}">` : `<i>${LOGOS[p.categoria?.toLowerCase()] || '📦'}</i>`}</div>
-                <h2 style="margin-bottom:5px;">${p.nombre}</h2>
-                
-                <div class="desc-completa">${p.descripcion_completa || 'Sin descripción detallada disponible.'}</div>
-                
-                <div class="paint-box" onclick="document.getElementById('paintCheck').click()">
-                    <input type="checkbox" id="paintCheck" onchange="actModalPrice(${p.precio}, ${costoPintado})"> 
-                    <span>Solicitar Pintado (+$${costoPintado})</span>
+        function renderInventory() {
+            const container = document.getElementById('vitrina');
+            container.innerHTML = filteredInventory.map((p) => {
+                const globalIndex = inventory.indexOf(p);
+                return `
+                <div class="card" onclick="openDetails(${globalIndex})">
+                    <div class="img-container">
+                        <img src="${p.imagen}" alt="${p.nombre}">
+                    </div>
+                    <div style="flex:1">
+                        <span class="tech-badge">${p.categoria}</span>
+                        <h3 style="margin:10px 0 5px 0; font-family:'Outfit'">${p.nombre}</h3>
+                        <p style="font-size:0.8rem; opacity:0.7;">${p.descripcion_corta}</p>
+                        <div class="print-stats">
+                            <div class="stat-item">⏱ ${p.tiempo || 'N/A'}</div>
+                            <div class="stat-item">⚖ ${p.gramos || '0'}g</div>
+                        </div>
+                    </div>
+                    <div class="price">$${p.precio}</div>
+                    <button class="btn">Configurar</button>
                 </div>
-                <div class="price" id="modalTotal">$${p.precio}</div>
-                <button class="btn-ver" style="background:var(--rosa)" onclick="agregarAlCarrito(${idx}, ${costoPintado})">Añadir al Carrito</button>`;
-            document.getElementById('miModal').style.display = "block";
+            `}).join('');
         }
 
-        function actModalPrice(base, extra) {
-            document.getElementById('modalTotal').innerText = `$${document.getElementById('paintCheck').checked ? (base + parseFloat(extra)).toFixed(2) : base.toFixed(2)}`;
-        }
-
-        function agregarAlCarrito(idx, costoExtra) {
-            const p = productos[idx];
-            const pintado = document.getElementById('paintCheck').checked;
-            const precioFinal = pintado ? (parseFloat(p.precio) + parseFloat(costoExtra)).toFixed(2) : parseFloat(p.precio).toFixed(2);
-            
-            carrito.push({ nombre: p.nombre, precioTotal: precioFinal, pintado: pintado, id: Date.now() });
-            actualizarCartBtn(); cerrarModal();
-        }
-
-        function actualizarCartBtn() {
-            const btn = document.getElementById('cartFloat');
-            btn.style.display = carrito.length > 0 ? "block" : "none";
-            document.getElementById('cartCount').innerText = carrito.length;
-        }
-
-        function mostrarRevisionCarrito() {
-            let total = 0;
-            let html = `<h2>Tu Pedido</h2><div style="text-align:left; margin-bottom:15px;">`;
-            carrito.forEach((item, index) => {
-                total += parseFloat(item.precioTotal);
-                html += `<div class="cart-item">
-                    <div><strong>${item.nombre}</strong><br>
-                    <small style="color:var(--rosa)">${item.pintado ? '✓ Incluye Pintado' : 'Solo impresión'}</small></div>
-                    <div style="text-align:right;"><strong>$${item.precioTotal}</strong><br><button class="btn-remove" onclick="removerDelCart(${index})">Quitar</button></div>
-                </div>`;
-            });
-            html += `</div><div class="price" style="font-size:1.8rem; margin:20px 0;">Total: $${total.toFixed(2)}</div>
-                    <button class="btn-ver" style="background:var(--rosa)" onclick="finalizarPedido()">Confirmar y WhatsApp</button>
-                    <button class="btn-ver" style="background:#eee; color:#333;" onclick="cerrarModal()">Seguir comprando</button>`;
-            document.getElementById('contenidoModal').innerHTML = html;
-            document.getElementById('miModal').style.display = "block";
-        }
-
-        function removerDelCart(idx) {
-            carrito.splice(idx, 1); actualizarCartBtn();
-            carrito.length > 0 ? mostrarRevisionCarrito() : cerrarModal();
-        }
-
-        function finalizarPedido() {
-            let total = 0;
-            let msg = "Hola Carlos, mi pedido es:\n\n";
-            carrito.forEach(i => {
-                total += parseFloat(i.precioTotal);
-                msg += `• *${i.nombre}* (${i.pintado ? 'Pintado' : 'Sin pintar'}) - $${i.precioTotal}\n`;
-            });
-            msg += `\n*TOTAL: $${total.toFixed(2)}*`;
-            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
-        }
-
-        function solicitarPersonalizado() {
-            document.getElementById('contenidoModal').innerHTML = `
-                <h2>Diseño Personalizado</h2>
-                <p style="font-size:0.9rem;">Medidas máximas: 180x180x180 mm. Por favor, especifique y adjunte imagen por WhatsApp.</p>
-                <input type="text" id="medidas" placeholder="Ej: 150x150x100 mm" style="width:90%; padding:10px; border-radius:10px; border:1px solid #ddd; margin-bottom:15px;">
-                <button class="btn-ver" style="background:var(--rosa)" onclick="enviarPersonalizado()">Contactar ahora</button>
+        function openDetails(idx) {
+            const p = inventory[idx];
+            const body = document.getElementById('modalBody');
+            body.innerHTML = `
+                <span onclick="closeModal()" style="position:absolute; right:25px; top:20px; font-size:1.5rem; cursor:pointer;">✕</span>
+                <img src="${p.imagen}" style="width:100%; height:250px; object-fit:contain; border-radius:20px;">
+                <h2 style="font-family:'Outfit'; margin:20px 0 10px 0;">${p.nombre}</h2>
+                <div class="print-stats" style="font-size:1rem; margin-bottom:15px;">
+                    <div class="stat-item">⏱ Tiempo estimado: ${p.tiempo || 'N/A'}</div>
+                    <div class="stat-item">⚖ Material: ${p.gramos || '0'}g</div>
+                </div>
+                <p>${p.descripcion_completa}</p>
+                <div class="price">$${p.precio}</div>
+                <button class="btn" onclick="addToCart(${idx})">Añadir al Carrito</button>
             `;
-            document.getElementById('miModal').style.display = "block";
+            document.getElementById('modal').style.display = 'flex';
         }
 
-        function enviarPersonalizado() {
-            const med = document.getElementById('medidas').value || "No especificadas";
-            const msg = `Hola Carlos, quiero un diseño personalizado.\nMedidas: ${med}\n(Adjuntaré la imagen por aquí)`;
-            window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
+        function addToCart(idx) {
+            cart.push(inventory[idx]);
+            document.getElementById('cartCount').innerText = cart.length;
+            closeModal();
         }
 
-        function cerrarModal() { document.getElementById('miModal').style.display = "none"; }
-        function toggleTheme() { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); }
-        window.onclick = (e) => { if(e.target.className === 'modal') cerrarModal(); }
-        cargar();
+        function verCarrito() {
+            if(cart.length === 0) return;
+            const body = document.getElementById('modalBody');
+            let total = cart.reduce((acc, item) => acc + parseFloat(item.precio), 0);
+            
+            body.innerHTML = `
+                <h2 style="font-family:'Outfit'">Pedido de Carlos</h2>
+                <div style="max-height:300px; overflow-y:auto;">
+                    ${cart.map((item, i) => `
+                        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #eee;">
+                            <span>${item.nombre}</span>
+                            <span>$${item.precio}</span>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="price" style="text-align:right; margin-top:20px;">Total: $${total.toFixed(2)}</div>
+                <button class="btn" style="margin-top:20px;" onclick="sendOrder()">Confirmar WhatsApp</button>
+            `;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function sendOrder() {
+            let msg = `*MARCEPRINT3D - PEDIDO*\nCliente: Carlos Manuel Panameño Marcenaro\n\n`;
+            cart.forEach(i => msg += `• ${i.nombre} - $${i.precio}\n`);
+            window.open(`https://wa.me/${WA_PHONE}?text=${encodeURIComponent(msg)}`);
+        }
+
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeToggleBtn');
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            btn.innerText = isDark ? 'Modo Oscuro' : 'Modo Claro';
+        }
+
+        window.onclick = (e) => { if(e.target.id === 'modal') closeModal(); }
     </script>
 </body>
 </html>
